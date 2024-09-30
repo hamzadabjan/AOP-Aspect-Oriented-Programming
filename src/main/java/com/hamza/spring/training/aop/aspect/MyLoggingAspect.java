@@ -11,24 +11,19 @@ import org.springframework.stereotype.Component;
 public class MyLoggingAspect {
 
     // This is where we add all of our related advices for logging
+    @Pointcut("execution(* com.hamza.spring.training.aop.dao.*.*(..))")
+    public void forDaoPackage() {}
 
-    // Let's start with an @Before advice
+    // create a pointcut for getter methods
+    @Pointcut("execution(* com.hamza.spring.training.aop.dao.*.get*(..))")
+    public void getter() {}
 
-    @Pointcut("execution( * add*(*,..))")
-    private void forDaoPackage(){};
+    // create a pointcut for setter methods
+    @Pointcut("execution(* com.hamza.spring.training.aop.dao.*.set*(..))")
+    public void setter() {}
 
-    @Pointcut("execution( * get*(..))")
-    private void getter(){};
-
-    @Pointcut("execution( * set*(..))")
-    private void setter(){};
-
-    @Pointcut("forDaoPackage() && !getter() && !setter()")
-    private void forAllMethodsExcludeGetterAndSetter(){};
-
-    @Before("forAllMethodsExcludeGetterAndSetter()")
-    public void  beforeAddAccountAdvice() {
-        System.out.println("\n ======>>> Executing @Before advice of the addAccount() method.");
-    }
+    // create pointcut: include package ... exclude getter/setter
+    @Pointcut("forDaoPackage() && !(getter() || setter())")
+    public void forDaoPackageNoGetterSetter() {}
 
 }

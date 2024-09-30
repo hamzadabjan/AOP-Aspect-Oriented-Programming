@@ -21,11 +21,23 @@ public class AopApplication {
 		};
 	}
 
-	private void demoTheBeforeAdvice(AccountDAO accountDAO,MembershipDAO membershipDAO) {
+	private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
 
-		Account tempAccount = new Account("Hamza","Manager");
-		accountDAO.addAccount(tempAccount,true);
-		membershipDAO.addAccount();
+		// call the business method
+		Account myAccount = new Account();
+		theAccountDAO.addAccount(myAccount, true);
+		theAccountDAO.doWork();
+
+		// call the accountdao getter/setter methods
+		theAccountDAO.setName("foobar");
+		theAccountDAO.setServiceCode("silver");
+
+		String name = theAccountDAO.getName();
+		String code = theAccountDAO.getServiceCode();
+
+		// call the membership business method
+		theMembershipDAO.addSillyMember();
+		theMembershipDAO.goToSleep();
 
 	}
 
