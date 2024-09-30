@@ -24,7 +24,7 @@ public class AopApplication {
 	private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
 
 		// call the business method
-		Account myAccount = new Account();
+		Account myAccount = new Account("Hamza","Height Level");
 		theAccountDAO.addAccount(myAccount, true);
 		theAccountDAO.doWork();
 
