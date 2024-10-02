@@ -2,6 +2,7 @@ package com.hamza.spring.training.aop;
 
 import com.hamza.spring.training.aop.dao.AccountDAO;
 import com.hamza.spring.training.aop.dao.MembershipDAO;
+import com.hamza.spring.training.aop.service.TrafficFortuneService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,11 +18,22 @@ public class AopApplication {
 	}
 
 	@Bean
-	public CommandLineRunner  commandLineRunner(AccountDAO accountDAO, MembershipDAO membershipDAO) {
+	public CommandLineRunner  commandLineRunner(AccountDAO accountDAO, MembershipDAO membershipDAO, TrafficFortuneService theTrafficFortuneService) {
 		return runner-> {
 			//demoTheBeforeAdvice(accountDAO,membershipDAO);
-			demoTheAfterReturningAdvice(accountDAO);
+//			demoTheAfterReturningAdvice(accountDAO);
+			demoTheAroundAdvice(theTrafficFortuneService);
 		};
+	}
+
+	private void demoTheAroundAdvice(TrafficFortuneService theTrafficFortuneService) {
+
+		System.out.println("\n Main program: demoTheAroundAdvice");
+		System.out.println("\n Calling getFortune");
+		String data= theTrafficFortuneService.getFortune();
+		System.out.println("\n My fortune is: " +data);
+		System.out.println("Finished");
+
 	}
 
 	private void demoTheAfterReturningAdvice(AccountDAO accountDAO) {
@@ -35,7 +47,7 @@ public class AopApplication {
 		System.out.println("\n");
 	}
 
-	private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
+	private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO, TrafficFortuneService theTrafficFortuneService) {
 
 		// call the business method
 		Account myAccount = new Account("Hamza","Height Level");

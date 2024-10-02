@@ -3,10 +3,8 @@ package com.hamza.spring.training.aop.aspect;
 
 import com.hamza.spring.training.aop.Account;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,8 +13,39 @@ import java.util.List;
 @Component
 public class MyLoggingAspect {
 
-    // add new advice for @AfterReturning on the findAccounts method
 
+    @Around("execution(* com.hamza.spring.training.aop.service.TrafficFortuneServiceImpl.getFortune(..))")
+    public Object aroundGetFortune(
+            ProceedingJoinPoint theProceedingJoinPoint) throws Throwable{
+        String method = theProceedingJoinPoint.getSignature().toShortString();
+        System.out.println("\n ======>>> Executing @After (finally) on method: "+method);
+
+        long begin = System.currentTimeMillis();
+
+        Object result = theProceedingJoinPoint.proceed();
+
+        long end = System.currentTimeMillis();
+
+        long duration = end - begin;
+
+        System.out.println("\n ======>> Duration: "+duration/1000.0 +"seconds");
+
+        return result;
+    }
+
+
+
+    // add new advice for @AfterThrowing on the findAccount method
+    @AfterThrowing(
+            pointcut = "execution(* com.hamza.spring.training.aop.dao.AccountDAO.findAccounts(..))",
+            throwing = "theExc"
+    )
+    public void AfterThrowingfindAccountsAdvice(JoinPoint joinPoint, Throwable theExc){
+        System.out.println("Exception name: "+ theExc);
+    }
+
+
+    // add new advice for @AfterReturning on the findAccounts method
     @AfterReturning(
             pointcut = "execution(* com.hamza.spring.training.aop.dao.AccountDAO.findAccounts(..))",
             returning = "result"
@@ -39,7 +68,7 @@ public class MyLoggingAspect {
         }
     }
 
-    // This is where we add all of our related advices for logging
+
     @Pointcut("execution(* com.hamza.spring.training.aop.dao.*.*(..))")
     public void forDaoPackage() {}
 

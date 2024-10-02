@@ -27,6 +27,8 @@ public class AccountDAOImpl implements AccountDAO{
         myAccounts.add(account1);
         myAccounts.add(account2);
         myAccounts.add(account3);
+        // throw an exception
+        myAccounts.get(3);
 
         System.out.println("before returing");
 
